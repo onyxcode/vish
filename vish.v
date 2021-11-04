@@ -22,7 +22,9 @@ fn main() {
 		}).split(' ')
 		match stdin[0] {
 			'cd' {
-				os.chdir(stdin[1]) ?
+				os.chdir(stdin[1]) or {
+					println("cd: error: no such file or directory")
+				}
 			}
 			'clear' {
 				term.clear()
