@@ -5,31 +5,31 @@ import term
 
 #include <signal.h>
 
-fn handler() {
+fn handler(signum os.Signal) {
+	println("Got signal $signum")
 	println('')
 	exit(0)
 }
 
 fn main() {
-	os.signal(2, handler)
-	os.signal(1, handler)
+	os.signal_opt(os.Signal.hup, handler) ?
+	os.signal_opt(os.Signal.quit, handler) ?
 	for {
 		abvwd := term.colorize(term.bold, '$os.getwd()').replace('$os.home_dir()', '~')
 		mut stdin := (os.input_opt('$abvwd\n➜ ') or {
 			exit(1)
-			panic('Exiting: $err')
 			''
 		}).split(' ')
 		match stdin[0] {
 			'cd' {
-				os.chdir(stdin[1])
+				os.chdir(stdin[1]) ?
 			}
 			'clear' {
 				term.clear()
 			}
 			'chmod' {
 				if os.exists(stdin[2]) {
-					os.chmod(stdin[2], ('0o' + stdin[1]).int())
+					os.chmod(stdin[2], ('0o' + stdin[1]).int()) ?
 				} else {
 					println('chmod: error: path does not exist')
 				}
@@ -70,7 +70,7 @@ rm			Removes file.
 rmd			Removes directory.')
 			}
 			'ls' {
-				ls := os.ls('.') ?.join('    ')
+				ls := os.ls('.') ?.join('  ')
 				println(ls)
 			}
 			'mkd' {
