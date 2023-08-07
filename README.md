@@ -1,2 +1,2 @@
-# vish
-A shell coded in [V](https://vlang.io). Work in progress.
+# Deprecated
+Please use [dvwallin/vlsh](https://github.com/dvwallin/vlsh) instead.
